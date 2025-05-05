@@ -1,4 +1,17 @@
-import { IsEmail, IsString, IsEnum, IsNotEmpty } from "class-validator";
+import { IsEmail, IsString, IsNotEmpty, IsBoolean, ValidateNested } from "class-validator";
+import { Type } from 'class-transformer';
+
+
+export class createUserSettingDto {
+
+    @IsNotEmpty()
+    @IsBoolean()
+    receiveEmail: boolean;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    receiveSMS: boolean;
+}
 
 export class CreateUserDto {
     @IsString()
@@ -11,10 +24,10 @@ export class CreateUserDto {
     @IsString()
     password: string;
 
+    @IsNotEmpty()
+    @ValidateNested() //inside user [] have object so
+    @Type(() => createUserSettingDto) //convert object to class
+    settings: createUserSettingDto;
 
-    // @IsEnum(["INTERN", "ADMIN"], {
-    //     message: "role is requred"
-    // })
-    // role: "INTERN" | "ADMIN";
 }
 
